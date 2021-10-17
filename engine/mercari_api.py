@@ -51,16 +51,7 @@ class MercariAPI():
         '''
         商品詳細ページの情報を取得
         '''
-        logger.info(f"item_id: {item_id}")
-        try:
-            params = {
-                "id": item_id
-            }
-            res = self.make_request(mode="item_detail", params=params)
-            return res
-        except Exception as e:
-            logger.error(e)
-            return {}
+        pass
         
     
     def search_items_for_page(self, q: str, page: int=0, sort: str="price", order: str="asc", exclude_keyword: str="", category_id: str="",
@@ -69,30 +60,7 @@ class MercariAPI():
         '''
         商品検索（１ページ分）
         '''
-        params = {
-            "limit": 120,
-            "keyword": q,
-            "exclude_keyword": " ".join(exclude_keyword.split()),
-            "category_id": category_id,
-            "sort": sort,
-            "order": order,
-            "price_min": min_price,
-            "price_max": max_price,
-            "status": status,
-            "item_condition_id": item_condition,
-            "shipping_payer_id": shipping_payer_id,
-            "page": page
-        }
-        logger.info(params)
-        try:
-            res = self.make_request("search_items", params=params)
-            if not res.get("data"):
-                logger.info("data end")
-                return []
-            return self._extract_items(res["data"])
-        except Exception as e:
-            logger.error(e)
-            return []
+        pass
         
     
     def search_items(self, q: str, page_limit: int=5, exlude_keyword: str="", category_id: str="",
@@ -101,43 +69,11 @@ class MercariAPI():
         '''
         商品検索（複数ページ）
         '''
-        items = []
-        for page in range(page_limit):
-            res = self.search_items_for_page(q, page, exclude_keyword=exlude_keyword, min_price=min_price, max_price=max_price, category_id=category_id,
-                                             sort=sort, order=order, shipping_payer_id=shipping_payer_id, item_condition=item_condition)
-            if len(res) == 0:
-                break
-            items.extend(res)
-            logger.info(f"page: {page + 1}")
-        
-        # 商品詳細を取得する場合
-        if is_detail:
-            for item in items:
-                res = self.fetch_item(item.id)    
-                if not res.get("data"):
-                    logger.error(f"no data: {item.id}")
-                    continue
-                item.description = res["data"]["description"]
-                item.seller_ratings = res["data"]["seller"]["num_ratings"]
-                item.category_name = res["data"]["item_category"]["name"]
-            
-        return items
+        pass
        
     
     def _extract_items(self, items: list):
         '''
         取得した結果を展開して、共通Item用のClassに格納する
         '''
-        results =[]
-        for item in items:
-            results.append(
-                SearchedItem(
-                    id = item.get("id"),
-                    name = item.get("name"),
-                    price = item.get("price"),
-                    thumbnail_url = item.get("thumbnails")[0],
-                    site = "mercari"
-                )
-            )
-            
-        return results
+        pass
